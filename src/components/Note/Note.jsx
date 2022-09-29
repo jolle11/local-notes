@@ -1,16 +1,22 @@
 import styled from 'styled-components';
-import { RiDeleteBin5Line } from 'react-icons/ri';
+import { RiDeleteBin5Line, RiFileCopy2Line } from 'react-icons/ri';
 
-const Note = ({ note, onClick: deleteNote }) => {
+const Note = ({ note, onClickDelete: deleteNote, onClickCopy: copyText }) => {
     const { id, date, text } = note;
+
     return (
         <Container>
             <div className="note">
                 <p className="note__text">{text}</p>
                 <p className="note__date">Taken: {date}</p>
-                <button onClick={() => deleteNote(id)} className="note__deletebtn">
-                    <RiDeleteBin5Line />
-                </button>
+                <div className="note__buttons">
+                    <button onClick={() => deleteNote(id)} className="note__btn note__btn--delete">
+                        <RiDeleteBin5Line />
+                    </button>
+                    <button onClick={() => copyText(text)} className="note__btn note__btn--copy">
+                        <RiFileCopy2Line />
+                    </button>
+                </div>
             </div>
         </Container>
     );
@@ -38,19 +44,36 @@ const Container = styled.div`
             text-align: right;
             padding: 5px 5px 5px 0;
         }
-        &__deletebtn {
+        &__buttons {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        &__btn {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 30px;
             font-size: 20px;
-            width: 100%;
+            width: 50%;
             border: none;
-            background: #ff6f6f;
-            transition: all 0.2s ease;
-            &:hover {
-                background: #b30000;
-                color: #fff;
+            &--delete {
+                background: #ff6f6f;
+                transition: all 0.2s ease;
+                &:hover {
+                    background: #b30000;
+                    color: #fff;
+                }
+            }
+            &--copy {
+                background: #0aa5ff;
+                transition: all 0.2s ease;
+                &:hover {
+                    background: #005a8f;
+                    color: #fff;
+                }
             }
         }
     }
