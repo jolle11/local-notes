@@ -50,15 +50,22 @@ function App() {
         if (localStorage.getItem('LocalNotes')) {
             setNotes([]);
             localStorage.removeItem('LocalNotes');
+            toast('All notes cleared 🧹', toastOptions);
         } else {
             toast('Nothing to clear 😅', toastOptions);
         }
+    };
+
+    const copyText = (text) => {
+        navigator.clipboard.writeText(text);
+        toast('Note copied to clipboard 📋', toastOptions);
     };
 
     const deleteNote = (id) => {
         const updatedNotes = notes.filter((note) => note.id !== id);
         localStorage.setItem('LocalNotes', JSON.stringify([...updatedNotes]));
         setNotes(updatedNotes);
+        toast('Note deleted 🗑', toastOptions);
     };
 
     return (
@@ -84,7 +91,12 @@ function App() {
                 {notes.length > 0 && (
                     <div className="notes__list">
                         {notes.map((note) => (
-                            <Note note={note} key={note.id} onClick={deleteNote} />
+                            <Note
+                                note={note}
+                                key={note.id}
+                                onClickDelete={deleteNote}
+                                onClickCopy={copyText}
+                            />
                         ))}
                     </div>
                 )}
