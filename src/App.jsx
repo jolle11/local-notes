@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toastOptions } from './config/ToastOptions';
 
 // COMPONENTS
-import { Note } from './components';
+import { Note, Footer } from './components';
 
 function App() {
     const [text, setText] = useState('');
@@ -100,6 +100,7 @@ function App() {
                         ))}
                     </div>
                 )}
+                <Footer />
             </div>
             <ToastContainer />
         </Container>
