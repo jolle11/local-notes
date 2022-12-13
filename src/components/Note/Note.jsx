@@ -1,25 +1,31 @@
-import styled from 'styled-components';
-import { RiDeleteBin5Line, RiFileCopy2Line } from 'react-icons/ri';
+import { RiDeleteBin5Line, RiFileCopy2Line } from "react-icons/ri";
+import styled from "styled-components";
 
 const Note = ({ note, onClickDelete: deleteNote, onClickCopy: copyText }) => {
-    const { id, date, text } = note;
+	const { id, date, text } = note;
 
-    return (
-        <Container>
-            <div className="note">
-                <p className="note__text">{text}</p>
-                <p className="note__date">Taken: {date}</p>
-                <div className="note__buttons">
-                    <button onClick={() => deleteNote(id)} className="note__btn note__btn--delete">
-                        <RiDeleteBin5Line />
-                    </button>
-                    <button onClick={() => copyText(text)} className="note__btn note__btn--copy">
-                        <RiFileCopy2Line />
-                    </button>
-                </div>
-            </div>
-        </Container>
-    );
+	return (
+		<Container>
+			<div className="note">
+				<p className="note__text">{text}</p>
+				<p className="note__date">Taken: {date}</p>
+				<div className="note__buttons">
+					<button
+						onClick={() => deleteNote(id)}
+						className="note__btn note__btn--delete"
+					>
+						<RiDeleteBin5Line />
+					</button>
+					<button
+						onClick={() => copyText(text)}
+						className="note__btn note__btn--copy"
+					>
+						<RiFileCopy2Line />
+					</button>
+				</div>
+			</div>
+		</Container>
+	);
 };
 
 export default Note;
