@@ -1,7 +1,7 @@
 import { RiDeleteBin5Line, RiFileCopy2Line } from "react-icons/ri";
 import styled from "styled-components";
 
-const Note = ({ note, onClickDelete: deleteNote, onClickCopy: copyText }) => {
+const Note = ({ note, onClickDelete, onClickCopy }) => {
 	const { id, date, text } = note;
 
 	return (
@@ -11,13 +11,15 @@ const Note = ({ note, onClickDelete: deleteNote, onClickCopy: copyText }) => {
 				<p className="note__date">Taken: {date}</p>
 				<div className="note__buttons">
 					<button
-						onClick={() => deleteNote(id)}
+						type="button"
+						onClick={() => onClickDelete(id)}
 						className="note__btn note__btn--delete"
 					>
 						<RiDeleteBin5Line />
 					</button>
 					<button
-						onClick={() => copyText(text)}
+						type="button"
+						onClick={() => onClickCopy(text)}
 						className="note__btn note__btn--copy"
 					>
 						<RiFileCopy2Line />

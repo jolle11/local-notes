@@ -2,120 +2,117 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { toastOptions } from "./config/ToastOptions";
 // TOASTIFY
 import { ToastContainer, toast } from "react-toastify";
+import { toastOptions } from "./config/ToastOptions";
 import "react-toastify/dist/ReactToastify.css";
 
 // COMPONENTS
 import { Footer, Note } from "./components";
 
 function App() {
-    const [text, setText] = useState("");
-    const [notes, setNotes] = useState([]);
+	const [text, setText] = useState("");
+	const [notes, setNotes] = useState([]);
 
-    // GET NOTES FROM LOCALSTORAGE
-    useEffect(() => {
-        if (localStorage.getItem("LocalNotes")) {
-            const storageNotes = JSON.parse(localStorage.getItem("LocalNotes"));
-            setNotes(storageNotes);
-        }
-    }, []);
+	// GET NOTES FROM LOCALSTORAGE
+	useEffect(() => {
+		if (localStorage.getItem("LocalNotes")) {
+			const storageNotes = JSON.parse(localStorage.getItem("LocalNotes"));
+			setNotes(storageNotes);
+		}
+	}, []);
 
-    const handleChange = (e) => {
-        setText(e.target.value);
-    };
+	const handleChange = (e) => {
+		setText(e.target.value);
+	};
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        switch (text) {
-            case typeof text && "": {
-                toast("Cannot save empty notes 🤷🏼‍♂️", toastOptions);
-                break;
-            }
-            default: {
-                const newNote = {
-                    id: Date.now(),
-                    date: moment().format("llll"),
-                    text: text,
-                };
-                setNotes([...notes, newNote]);
-                localStorage.setItem(
-                    "LocalNotes",
-                    JSON.stringify([...notes, newNote])
-                );
-                setText("");
-            }
-        }
-    };
-    const handleClearAll = (e) => {
-        e.preventDefault();
-        if (localStorage.getItem("LocalNotes")) {
-            setNotes([]);
-            localStorage.removeItem("LocalNotes");
-            toast("All notes cleared 🧹", toastOptions);
-        } else {
-            toast("Nothing to clear 😅", toastOptions);
-        }
-    };
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (text.trim() === "") {
+			toast("Cannot save empty notes 🤷🏼‍♂️", toastOptions);
+			return;
+		}
 
-    const copyText = (text) => {
-        navigator.clipboard.writeText(text);
-        toast("Note copied to clipboard 📋", toastOptions);
-    };
+		const newNote = {
+			id: Date.now(),
+			date: moment().format("llll"),
+			text: text,
+		};
+		const updatedNotes = [...notes, newNote];
+		setNotes(updatedNotes);
+		localStorage.setItem("LocalNotes", JSON.stringify(updatedNotes));
+		setText("");
+	};
+	const handleClearAll = (e) => {
+		e.preventDefault();
+		if (localStorage.getItem("LocalNotes")) {
+			setNotes([]);
+			localStorage.removeItem("LocalNotes");
+			toast("All notes cleared 🧹", toastOptions);
+		} else {
+			toast("Nothing to clear 😅", toastOptions);
+		}
+	};
 
-    const deleteNote = (id) => {
-        const updatedNotes = notes.filter((note) => note.id !== id);
-        localStorage.setItem("LocalNotes", JSON.stringify([...updatedNotes]));
-        setNotes(updatedNotes);
-        toast("Note deleted 🗑", toastOptions);
-    };
+	const copyText = (text) => {
+		navigator.clipboard.writeText(text);
+		toast("Note copied to clipboard 📋", toastOptions);
+	};
 
-    return (
-        <Container>
-            <div className="notes">
-                <div>
-                    <h1 className="notes__title">Local Notes</h1>
-                    <form className="notes__form">
-                        <textarea
-                            type="text"
-                            className="notes__input"
-                            name="text"
-                            placeholder="Start writing notes"
-                            value={text}
-                            onChange={handleChange}
-                        />
-                        <button
-                            className="notes__btn notes__btn--save"
-                            onClick={handleSubmit}
-                        >
-                            Save note
-                        </button>
-                        <button
-                            className="notes__btn notes__btn--clear"
-                            onClick={handleClearAll}
-                        >
-                            Clear all
-                        </button>
-                    </form>
-                    {notes.length > 0 && (
-                        <div className="notes__list">
-                            {notes.map((note) => (
-                                <Note
-                                    note={note}
-                                    key={note.id}
-                                    onClickDelete={deleteNote}
-                                    onClickCopy={copyText}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-                <Footer />
-            </div>
-            <ToastContainer />
-        </Container>
-    );
+	const deleteNote = (id) => {
+		const updatedNotes = notes.filter((note) => note.id !== id);
+		localStorage.setItem("LocalNotes", JSON.stringify([...updatedNotes]));
+		setNotes(updatedNotes);
+		toast("Note deleted 🗑", toastOptions);
+	};
+
+	return (
+		<Container>
+			<div className="notes">
+				<div>
+					<h1 className="notes__title">Local Notes</h1>
+					<form className="notes__form">
+						<textarea
+							type="text"
+							className="notes__input"
+							name="text"
+							placeholder="Start writing notes"
+							value={text}
+							onChange={handleChange}
+						/>
+						<button
+							type="button"
+							className="notes__btn notes__btn--save"
+							onClick={handleSubmit}
+						>
+							Save note
+						</button>
+						<button
+							type="button"
+							className="notes__btn notes__btn--clear"
+							onClick={handleClearAll}
+						>
+							Clear all
+						</button>
+					</form>
+					{notes.length > 0 && (
+						<div className="notes__list">
+							{notes.map((note) => (
+								<Note
+									note={note}
+									key={note.id}
+									onClickDelete={deleteNote}
+									onClickCopy={copyText}
+								/>
+							))}
+						</div>
+					)}
+				</div>
+				<Footer />
+			</div>
+			<ToastContainer />
+		</Container>
+	);
 }
 
 export default App;
